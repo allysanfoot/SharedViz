@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-d
 
 // Import pages
 import Home from './pages/Home';
+import { Room } from './pages/Room';
 
 // Import components
 import TestSocket from './components/TestSocket';
@@ -14,6 +15,7 @@ function App() {
         <TestSocket />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/room/:id" element={<Room />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>

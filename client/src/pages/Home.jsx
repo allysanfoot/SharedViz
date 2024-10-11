@@ -1,20 +1,24 @@
-import React from 'react';
+import React from 'react'
 import { useNavigate } from 'react-router-dom';
+import { nanoid } from 'nanoid'
 
-function Home() {
-    const navigate = useNavigate(); // Use the useNavigate hook instead of history
+const Home = () => {
+    const navigate = useNavigate();
 
+    // Create a new room
     const createRoom = () => {
-        const roomId = 'some-generated-room-id'; // Example room ID
-        navigate(`/room/${roomId}`); // Navigate to the new route
-    };
+        const roomId = nanoid(10);
+        navigate(`/room/${roomId}`); // Navigate to the new room
+        console.log('Creating room:', roomId);
+    }
 
     return (
         <div>
-            <h1>Home</h1>
+            <h1>Home Page</h1>
+            <p>Click the button below to create a new room.</p>
             <button onClick={createRoom}>Create Room</button>
         </div>
-    );
+    )
 }
 
 export default Home;
