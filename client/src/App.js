@@ -12,10 +12,10 @@ function App() {
   return (
     <Router>
       <div>
-        <TestSocket />
+        {/* <TestSocket /> */}
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/room/:id" element={<Room />} />
+          <Route path="/room/:roomId" element={<Room />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>

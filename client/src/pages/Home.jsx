@@ -2,7 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { nanoid } from 'nanoid'
 
-const Home = () => {
+const Home = ({ location, history }) => {
     const navigate = useNavigate();
 
     // Create a new room
