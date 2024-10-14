@@ -1,24 +1,61 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { nanoid } from 'nanoid'
+import { sckt } from '../components/Socket'; // Import the socket instance
+import { nanoid } from 'nanoid';
 
-const Home = ({ location, history }) => {
+const Home = () => {
+    const [roomId, setRoomId] = useState('');
+    const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    // Create a new room
-    const createRoom = () => {
-        const roomId = nanoid(10);
-        navigate(`/room/${roomId}`); // Navigate to the new room
-        console.log('Creating room:', roomId);
-    }
+    useEffect(() => {
+        return () => {
+            sckt.socket.off('error');
+            sckt.socket.off('userJoined');
+        };
+    }, []);    
+
+    // Handle creating a new room
+    const handleCreateRoom = () => {
+        const newRoomId = nanoid(10); // Generate a new random room ID
+        sckt.socket.emit('createRoom', newRoomId); // Emit event to create room on the server
+        navigate(`/room/${newRoomId}`); // Redirect to the newly created room
+    };
+
+    // Handle joining an existing room
+    const handleJoinRoom = () => {
+        if (roomId) {
+            console.log(`Joining room: ${roomId}`);
+            sckt.socket.emit('joinRoom', { roomId: roomId, userId: sckt.socket.id });
+
+            // Listen for error from server
+            sckt.socket.on('error', (message) => {
+                setError(message); // Display error message to the user
+            });
+
+            // Listen for userJoined event from server
+            sckt.socket.on('userJoined', () => {
+                navigate(`/room/${roomId}`); // Redirect to the room if joined successfully
+            });
+        } else {
+            setError('Please enter a valid room ID.');
+        }
+    };
 
     return (
-        <div>
-            <h1>Home Page</h1>
-            <p>Click the button below to create a new room.</p>
-            <button onClick={createRoom}>Create Room</button>
+        <div className="home-container">
+            <h1>Welcome to SharedViz</h1>
+            <input
+                type="text"
+                placeholder="Enter Room ID"
+                value={roomId}
+                onChange={(e) => setRoomId(e.target.value)}
+            />
+            <button onClick={handleJoinRoom}>Join Room</button>
+            {error && <p className="error">{error}</p>}
+            <button onClick={handleCreateRoom}>Create New Room</button>
         </div>
-    )
-}
+    );
+};
 
 export default Home;

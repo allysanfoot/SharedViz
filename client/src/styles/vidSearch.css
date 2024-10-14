@@ -1,0 +1,12 @@
+.video-queue-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.video-search {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
